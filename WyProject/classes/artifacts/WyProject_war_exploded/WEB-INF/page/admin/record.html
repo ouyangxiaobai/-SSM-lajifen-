@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>垃圾运输信息</title>
+    #parse("sys/header.html")
+</head>
+<body>
+<div id="rrapp" v-cloak>
+    <div v-show="showList">
+        <div class="grid-btn">
+            <div class="form-group col-sm-2">
+                <select name="" id="" class="form-control" :disabled="showInfo" v-model="q.user">
+                    <option value="">-全部信息-</option>
+                    <option :value="l.userId" v-for="l in list">{{l.username}}</option>
+                </select>
+            </div>
+            <a class="btn btn-default" @click="query">查询</a>
+            #if($shiro.hasPermission("record:save"))
+            <a class="btn btn-primary" @click="add"><i class="fa fa-plus"></i>&nbsp;新增</a>
+            #end
+            #if($shiro.hasPermission("record:update"))
+            <a class="btn btn-primary" @click="update"><i class="fa fa-pencil-square-o"></i>&nbsp;修改</a>
+            #end
+            #if($shiro.hasPermission("record:delete"))
+            <a class="btn btn-primary" @click="del"><i class="fa fa-trash-o"></i>&nbsp;删除</a>
+            #end
+            <a class="btn btn-primary" @click="info"><i class="fa fa-info"></i>&nbsp;详情</a>
+        </div>
+        <table id="jqGrid"></table>
+        <div id="jqGridPager"></div>
+    </div>
+
+    <div v-show="!showList" class="panel panel-success">
+        <div class="panel-heading">{{title}}</div>
+        <form class="form-horizontal">
+            <div class="form-group">
+                <div class="col-sm-2 control-label">车牌号码</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" :disabled="showInfo" v-model="record.name"
+                           placeholder="车牌号码"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">运输分量</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" :disabled="showInfo" v-model="record.price"
+                           placeholder="运输分量"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">运输时间</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" :disabled="showInfo" v-model="record.time"
+
+                           onclick="layui.laydate({elem: this, istime: true, format: 'YYYY-MM-DD hh:mm:ss', choose: function(date){vm.record.time=date;}})"
+                           placeholder="运输时间"/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">小区名称</div>
+                <div class="col-sm-10">
+                    <select name="" id="" class="form-control" :disabled="record.id" v-model="record.user">
+                        <option value="0">-小区名称-</option>
+                        <option :value="l.userId" v-for="l in list">{{l.username}}</option>
+                    </select>
+
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label">种类</div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" :disabled="showInfo" v-model="record.remark"
+                           placeholder="种类"/>
+                </div>
+            </div>
+            <div class="form-group" v-if="record.id">
+                <div class="col-sm-2 control-label">运输状态</div>
+                <div class="col-sm-10">
+                    <select name="" id="" class="form-control" :disabled="showInfo" v-model="record.state">
+                        <option value="待运输">待运输</option>
+                        <option value="已运输">已运输</option>
+                    </select>
+                </div>
+            </div>
+            <div class="form-group" v-if="showInfo">
+                <div class="col-sm-2 control-label"></div>
+                <div class="col-sm-10">
+                    <input type="text" class="form-control" :disabled="showInfo" v-model="record.gmttime"
+                           placeholder=""/>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-2 control-label"></div>
+                <input type="button" class="btn btn-primary" @click="saveOrUpdate" value="确定" v-if="!showInfo"/>
+                &nbsp;&nbsp;<input type="button" class="btn btn-warning" @click="reload" value="返回"/>
+            </div>
+        </form>
+    </div>
+</div>
+
+<script src="${rc.contextPath}/js/admin/record.js?_${date.systemTime}"></script>
+</body>
+</html>
